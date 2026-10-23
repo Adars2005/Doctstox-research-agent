@@ -1,0 +1,36 @@
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+load_dotenv(ROOT_DIR / ".env")
+
+DATA_DIR = Path(__file__).resolve().parent / "data"
+UPLOAD_DIR = Path(__file__).resolve().parent / "uploads"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+DB_PATH = DATA_DIR / "docstox.db"
+
+GROQ_API_KEY = os.getenv("GROQ_API_KEY") or os.getenv("OPENAI_API_KEY", "")
+EXA_API_KEY = os.getenv("EXA_API_KEY", "")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
+GROQ_STT_MODEL = os.getenv("GROQ_STT_MODEL", "whisper-large-v3-turbo")
+GROQ_TTS_MODEL = os.getenv("GROQ_TTS_MODEL", "canopylabs/orpheus-v1-english")
+GROQ_TTS_VOICE = os.getenv("GROQ_TTS_VOICE", "hannah")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+GEMINI_EMBEDDING_MODEL = os.getenv(
+    "GEMINI_EMBEDDING_MODEL", "models/gemini-embedding-2"
+)
+
+MAX_UPLOAD_BYTES = 25 * 1024 * 1024
+MAX_AUDIO_BYTES = 25 * 1024 * 1024
+def key_status() -> dict[str, bool]:
+    return {
+        "groq": bool(GROQ_API_KEY),
+        "exa": bool(EXA_API_KEY),
+        "gemini": bool(GEMINI_API_KEY),
+    }
